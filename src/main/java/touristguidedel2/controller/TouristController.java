@@ -9,14 +9,14 @@ import touristguidedel2.service.TouristService;
 @Controller
 public class TouristController {
 
-    private TouristService touristService;
+    private final TouristService touristService;
 
     public TouristController() {
         touristService = new TouristService();
     }
 
     @GetMapping("/attractions")
-    public String attractions(Model model) {
+    public String attractionList(Model model) {
         model.addAttribute("touristAttractions",touristService.getAllAttractions());
         return "attractionList";
     }
