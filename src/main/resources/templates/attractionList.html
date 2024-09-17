@@ -11,11 +11,15 @@
         <tr>
             <th>Navn</th>
             <th>Beskrivelse</th>
+            <th></th>
         </tr>
         <tr th:each="touristAttraction : ${touristAttractions}">
             <td th:text="${touristAttraction.name}"></td> <!-- name er konverteret til json property??? -->
             <td th:text="${touristAttraction.description}"></td>
+            <td><a th:href="@{'/attractions/' + ${touristAttraction.name} + '/tags'}"><button>Tags</button></a></td>
         </tr>
     </table>
+
+    <button>Tilføj attraktion</button>
 </body>
 </html>

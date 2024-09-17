@@ -22,4 +22,13 @@ public class TouristRepository {
     public List<TouristAttraction> getAllAttractions() {
         return List.copyOf(touristAttractions);
     }
+
+    public TouristAttraction getAttractionByName(String name) {
+        for (TouristAttraction touristAttraction : touristAttractions){
+            if (touristAttraction.getName().equals(name)){
+                return touristAttraction;
+            }
+        }
+        return null;
+    }
 }
