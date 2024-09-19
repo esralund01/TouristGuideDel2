@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/main.css}">
+    <title th:text="${touristAttraction/add} + ' tags'"></title>
+</head>
+<body>
+<h1>
+Tilføj turistattraktion
+</h1>
+<label for="name">Navn:
+</label>
+<input id="name">
+<label for="name">Beskrivelse:
+</label>
+<input id="description">
+<label for="city">By:
+</label>
+<option id="city">
+</option>
+<label for="tags">Tags:
+</label>
+<input id="tags" type="checkbox">
+<button>OK</button>
+<button>Fortryd</button>
+</body>
+</html>

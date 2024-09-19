@@ -34,8 +34,8 @@ public class TouristController {
     }
 
     @GetMapping("/attractions/add")
-    public String attractions3() {
-        return null;
+    public String attractions3(Model model) {
+        return "forms";
     }
 
     @PostMapping("/attractions/save")
