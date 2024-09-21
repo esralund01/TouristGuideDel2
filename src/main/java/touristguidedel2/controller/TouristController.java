@@ -35,6 +35,8 @@ public class TouristController {
 
     @GetMapping("/attractions/add")
     public String attractions3(Model model) {
+        model.addAttribute("cities", touristService.getCities());
+        model.addAttribute("tags", touristService.getTags());
         return "forms";
     }
 

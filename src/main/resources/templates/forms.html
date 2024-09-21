@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/main.css}">
-    <title th:text="${touristAttraction/add} + ' tags'"></title>
+    <title>Tilføj turistattraktion</title>
 </head>
 <body>
-<h1>
-Tilføj turistattraktion
-</h1>
-<label for="name">Navn:
-</label>
-<input id="name">
-<label for="name">Beskrivelse:
-</label>
-<input id="description">
-<label for="city">By:
-</label>
-<option id="city">
-</option>
-<label for="tags">Tags:
-</label>
-<input id="tags" type="checkbox">
-<button>OK</button>
-<button>Fortryd</button>
+    <h1>Tilføj turistattraktion</h1>
+    <label for="name">Navn:</label>
+    <input id="name">
+    <br>
+    <label for="description">Beskrivelse:</label>
+    <input id="description">
+    <br>
+    <label for="cityOption">By:</label>
+    <select id="cityOption" name="city" th:field="*{cities}">
+        <option th:each= "city: ${cities}" th:value="${city}" th:text="${city}">Milk Type</option>
+    </select>
+    <br>
+    <label>Tags:</label>
+    <div th:each="tag : ${tags}">
+        <input type="checkbox" th:field="*{tags}" th:value="${tag}" th:text="${tag}" />
+    </div>
+    <br>
+    <button>OK</button>
+    <button>Fortryd</button>
 </body>
 </html>
