@@ -14,7 +14,7 @@ public class TouristService {
         touristRepository = new TouristRepository();
     }
 
-    public void addTouristAttraction(TouristAttraction touristAttraction){
+    public void addTouristAttraction(TouristAttraction touristAttraction) throws IllegalStateException {
         touristRepository.addTouristAttraction(touristAttraction);
     }
 
@@ -32,5 +32,9 @@ public class TouristService {
 
     public SortedSet<String> getTags() {
         return touristRepository.getTags();
+    }
+
+    public void updateTouristAttraction(TouristAttraction touristAttraction) {
+        touristRepository.updateTouristAttraction(touristAttraction);
     }
 }
