@@ -13,9 +13,11 @@ import touristguidedel2.service.TouristService;
 public class TouristController {
 
     private final TouristService touristService;
+    private boolean wrongName;
 
     public TouristController() {
         touristService = new TouristService();
+        wrongName = false;
     }
 
     @GetMapping("/attractions")
@@ -40,23 +42,35 @@ public class TouristController {
         model.addAttribute("cities", touristService.getCities());
         model.addAttribute("tags", touristService.getTags());
         model.addAttribute("touristAttraction", new TouristAttraction());
+        model.addAttribute("wrongName", wrongName);
+        wrongName = false;
         return "forms";
     }
 
     @PostMapping("/attractions/save")
     public String attractionSave(@ModelAttribute TouristAttraction touristAttraction) {
-        touristService.addTouristAttraction(touristAttraction);
-        return "redirect:/attractions";
+        try {
+            touristService.addTouristAttraction(touristAttraction);
+            return "redirect:/attractions";
+        } catch (IllegalStateException ise) {
+            wrongName = true;
+            return "redirect:/attractions/add";
+        }
+
     }
 
     @GetMapping("/attractions/{name}/edit")
-    public String attractions5() {
-        return null;
+    public String attractionEdit(@PathVariable String name, Model model) {
+        model.addAttribute("cities", touristService.getCities());
+        model.addAttribute("tags", touristService.getTags());
+        model.addAttribute("touristAttraction", touristService.getAttractionByName(name));
+        return "updateAttraction";
     }
 
     @PostMapping("/attractions/update")
-    public String attractions6() {
-        return null;
+    public String attractionUpdate(@ModelAttribute TouristAttraction touristAttraction) {
+        touristService.updateTouristAttraction(touristAttraction);
+        return "redirect:/attractions";
     }
 
     @PostMapping("/attractions/delete/{name}")

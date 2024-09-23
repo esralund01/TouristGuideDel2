@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/main.css}">
-    <title>Tilføj turistattraktion</title>
+    <title>Ændring af informationer</title>
 </head>
 <body>
-    <h1>Tilføj turistattraktion</h1>
-    <p th:if="${wrongName}" style="color: red">Der blev ikke indtastet navn!</p>
-    <form th:action="@{/attractions/save}" th:object="${touristAttraction}" method="post">
+<h1>Ændring af informationer</h1>
+<form th:action="@{/attractions/update}" th:object="${touristAttraction}" method="post">
     <label for="name">Navn:</label>
-    <input id="name" th:field="*{name}">
+    <input id="name" th:field="*{name}" readonly>
     <br>
     <label for="description">Beskrivelse:</label>
     <input id="description" th:field="*{description}">
@@ -26,7 +25,7 @@
     </div>
     <br>
     <button type="submit">OK</button>
-    </form>
-    <button>Fortryd</button>
+</form>
+<button>Fortryd</button>
 </body>
 </html>

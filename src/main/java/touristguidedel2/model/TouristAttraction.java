@@ -11,7 +11,7 @@ public class TouristAttraction {
 
 
     public TouristAttraction(String name, String description, String city, List<String> tags) {
-        setName(name);
+        this.name = name;
         this.description = description;
         this.city = city;
         this.tags = tags;
@@ -41,12 +41,7 @@ public class TouristAttraction {
     }
 
     public void setName(String name) {
-        if (name.isBlank()){
-            this.name = "unknown name";
-        }
-        else {
-            this.name = name;
-        }
+        this.name = name;
     }
 
     public String getDescription() {
