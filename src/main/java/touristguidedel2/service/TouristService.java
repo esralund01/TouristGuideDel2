@@ -4,6 +4,7 @@ import touristguidedel2.model.TouristAttraction;
 import touristguidedel2.repository.TouristRepository;
 
 import java.util.List;
+import java.util.SortedSet;
 
 public class TouristService {
 
@@ -13,11 +14,23 @@ public class TouristService {
         touristRepository = new TouristRepository();
     }
 
+    public void addTouristAttraction(TouristAttraction touristAttraction){
+        touristRepository.addTouristAttraction(touristAttraction);
+    }
+
     public List<TouristAttraction> getAllAttractions() {
         return touristRepository.getAllAttractions();
     }
 
     public TouristAttraction getAttractionByName(String name) {
         return touristRepository.getAttractionByName(name);
+    }
+
+    public SortedSet<String> getCities() {
+        return touristRepository.getCities();
+    }
+
+    public SortedSet<String> getTags() {
+        return touristRepository.getTags();
     }
 }

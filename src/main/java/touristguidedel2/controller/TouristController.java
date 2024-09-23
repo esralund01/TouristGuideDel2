@@ -3,8 +3,10 @@ package touristguidedel2.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import touristguidedel2.model.TouristAttraction;
 import touristguidedel2.service.TouristService;
 
 @Controller
@@ -34,13 +36,17 @@ public class TouristController {
     }
 
     @GetMapping("/attractions/add")
-    public String attractions3() {
-        return null;
+    public String attractionAdd(Model model) {
+        model.addAttribute("cities", touristService.getCities());
+        model.addAttribute("tags", touristService.getTags());
+        model.addAttribute("touristAttraction", new TouristAttraction());
+        return "forms";
     }
 
     @PostMapping("/attractions/save")
-    public String attractions4() {
-        return null;
+    public String attractionSave(@ModelAttribute TouristAttraction touristAttraction) {
+        touristService.addTouristAttraction(touristAttraction);
+        return "redirect:/attractions";
     }
 
     @GetMapping("/attractions/{name}/edit")

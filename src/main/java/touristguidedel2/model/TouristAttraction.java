@@ -11,10 +11,13 @@ public class TouristAttraction {
 
 
     public TouristAttraction(String name, String description, String city, List<String> tags) {
-        this.name = name;
+        setName(name);
         this.description = description;
         this.city = city;
         this.tags = tags;
+    }
+
+    public TouristAttraction(){
     }
 
     public String getCity() {
@@ -38,7 +41,12 @@ public class TouristAttraction {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (name.isBlank()){
+            this.name = "unknown name";
+        }
+        else {
+            this.name = name;
+        }
     }
 
     public String getDescription() {
