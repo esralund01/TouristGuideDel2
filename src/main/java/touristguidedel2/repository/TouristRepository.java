@@ -60,4 +60,8 @@ public class TouristRepository {
             }
         }
     }
+
+    public void deleteAttraction(String name) {
+        touristAttractions.removeIf(touristAttraction -> touristAttraction.getName().equals(name));
+    }
 }
