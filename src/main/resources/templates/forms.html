@@ -7,15 +7,16 @@
 </head>
 <body>
     <h1>Tilføj turistattraktion</h1>
+    <form th:action="@{/attractions/save}" th:object="${touristAttraction}" method="post">
     <label for="name">Navn:</label>
-    <input id="name">
+    <input id="name" th:field="*{name}">
     <br>
     <label for="description">Beskrivelse:</label>
-    <input id="description">
+    <input id="description" th:field="*{description}">
     <br>
     <label for="cityOption">By:</label>
-    <select id="cityOption" name="city" th:field="*{cities}">
-        <option th:each= "city: ${cities}" th:value="${city}" th:text="${city}">Milk Type</option>
+    <select id="cityOption" name="city" th:field="*{city}">
+        <option th:each= "city: ${cities}" th:value="${city}" th:text="${city}"></option>
     </select>
     <br>
     <label>Tags:</label>
@@ -23,7 +24,8 @@
         <input type="checkbox" th:field="*{tags}" th:value="${tag}" th:text="${tag}" />
     </div>
     <br>
-    <button>OK</button>
+    <button type="submit">OK</button>
+    </form>
     <button>Fortryd</button>
 </body>
 </html>

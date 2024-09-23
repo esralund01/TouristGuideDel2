@@ -14,6 +14,10 @@ public class TouristService {
         touristRepository = new TouristRepository();
     }
 
+    public void addTouristAttraction(TouristAttraction touristAttraction){
+        touristRepository.addTouristAttraction(touristAttraction);
+    }
+
     public List<TouristAttraction> getAllAttractions() {
         return touristRepository.getAllAttractions();
     }

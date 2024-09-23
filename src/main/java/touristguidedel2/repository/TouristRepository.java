@@ -43,4 +43,8 @@ public class TouristRepository {
     public SortedSet<String> getTags() {
         return tags;
     }
+
+    public void addTouristAttraction(TouristAttraction touristAttraction) {
+        touristAttractions.add(touristAttraction);
+    }
 }
