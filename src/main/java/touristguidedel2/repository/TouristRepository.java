@@ -45,11 +45,7 @@ public class TouristRepository {
     }
 
     public void addTouristAttraction(TouristAttraction touristAttraction) {
-        if (touristAttraction.getName().isBlank()) {
-            throw new IllegalStateException("Tourist Attraction name cannot be blank.");
-        } else {
-            touristAttractions.add(touristAttraction);
-        }
+        touristAttractions.add(touristAttraction);
     }
 
     public void updateTouristAttraction(TouristAttraction touristAttraction) {
@@ -64,4 +60,14 @@ public class TouristRepository {
     public void deleteAttraction(String name) {
         touristAttractions.removeIf(touristAttraction -> touristAttraction.getName().equals(name));
     }
+
+    public boolean touristAttractionExists(String name) {
+        for (TouristAttraction touristAttraction : touristAttractions) {
+            if (touristAttraction.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
