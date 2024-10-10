@@ -2,29 +2,40 @@ package touristguidedel2.repository;
 
 import touristguidedel2.model.TouristAttraction;
 
+import java.sql.*;
 import java.util.*;
 
 public class TouristRepository {
 
-    private final List<TouristAttraction> touristAttractions;
-    private final SortedSet<String> cities;
-    private final SortedSet<String> tags;
-
-    public TouristRepository() {
-
-        touristAttractions = new ArrayList<>(List.of(
-            new TouristAttraction("SMK","Museum for Kunst","København",List.of("Museum", "Kunst")),
-            new TouristAttraction("Odense Zoo","Europas bedste zoo","Odense", List.of("Børnevenlig")),
-            new TouristAttraction("Dyrehaven","Naturpark med skovområder","Kongens Lyngby",List.of("Natur", "Gratis")),
-            new TouristAttraction("Tivoli","Forlystelsespark i København centrum","København",List.of("Børnevenlig"))
-        ));
-
-        cities = new TreeSet<>(List.of("Albertslund", "Kongens Lyngby", "København", "Odense"));
-        tags = new TreeSet<>(List.of("Museum", "Kunst", "Børnevenlig", "Natur", "Gratis"));
-    }
+    private String url; // TODO: Skal instantieres
 
     public List<TouristAttraction> getAllAttractions() {
-        return List.copyOf(touristAttractions);
+
+        List<TouristAttraction> touristAttractions = new ArrayList<>();
+        String sql = """
+            SELECT
+                touristAttractions.attractionName as attractionName,
+                touristAttractions.attractionDescription as attractionDescription,
+                cities.cityName as cityName,
+            FROM touristAttractions JOIN cities ON touristAttractions.city = cities.cityId""";
+
+        try (Connection connection = DriverManager.getConnection(url)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+
+                String name = resultSet.getString("attractionName");
+                String description = resultSet.getString("attractionDescription");
+                String cityName = resultSet.getString("cityName");
+
+                touristAttractions.add(new TouristAttraction(name, description, cityName, new ArrayList<>()));
+            }
+
+        } catch (SQLException ignored) {}
+
+        return touristAttractions;
     }
 
     public TouristAttraction getAttractionByName(String name) {
