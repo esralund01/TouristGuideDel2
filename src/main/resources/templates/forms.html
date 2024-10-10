@@ -7,7 +7,8 @@
 </head>
 <body>
     <h1>Tilføj turistattraktion</h1>
-    <p th:if="${wrongName}" style="color: red">Der blev ikke indtastet navn!</p>
+    <p th:if="${no_name}" class="error">Der blev ikke indtastet et navn.</p>
+    <p th:if="${name_taken}" class="error">Der er allerede en turistattraktion med det navn.</p>
     <form th:action="@{/attractions/save}" th:object="${touristAttraction}" method="post">
     <label for="name">Navn:</label>
     <input id="name" th:field="*{name}">
@@ -15,8 +16,8 @@
     <label for="description">Beskrivelse:</label>
     <input id="description" th:field="*{description}">
     <br>
-    <label for="cityOption">By:</label>
-    <select id="cityOption" name="city" th:field="*{city}">
+    <label for="city">By:</label>
+    <select id="city" name="city" th:field="*{city}">
         <option th:each= "city: ${cities}" th:value="${city}" th:text="${city}"></option>
     </select>
     <br>
@@ -27,6 +28,6 @@
     <br>
     <button type="submit">OK</button>
     </form>
-    <button>Fortryd</button>
+    <a th:href="@{/attractions}"><button>Fortryd</button></a>
 </body>
 </html>

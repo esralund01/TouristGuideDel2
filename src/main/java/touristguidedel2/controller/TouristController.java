@@ -2,10 +2,7 @@ package touristguidedel2.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import touristguidedel2.model.TouristAttraction;
 import touristguidedel2.service.TouristService;
 
@@ -13,11 +10,9 @@ import touristguidedel2.service.TouristService;
 public class TouristController {
 
     private final TouristService touristService;
-    private boolean wrongName;
 
     public TouristController() {
         touristService = new TouristService();
-        wrongName = false;
     }
 
     @GetMapping("/attractions")
@@ -38,25 +33,26 @@ public class TouristController {
     }
 
     @GetMapping("/attractions/add")
-    public String attractionAdd(Model model) {
+    public String attractionAdd(@RequestParam(defaultValue = "") String error, Model model) {
         model.addAttribute("cities", touristService.getCities());
         model.addAttribute("tags", touristService.getTags());
         model.addAttribute("touristAttraction", new TouristAttraction());
-        model.addAttribute("wrongName", wrongName);
-        wrongName = false;
+        model.addAttribute("no_name", error.equals("no_name"));
+        model.addAttribute("name_taken", error.equals("name_taken"));
         return "forms";
     }
 
     @PostMapping("/attractions/save")
     public String attractionSave(@ModelAttribute TouristAttraction touristAttraction) {
-        try {
-            touristService.addTouristAttraction(touristAttraction);
-            return "redirect:/attractions";
-        } catch (IllegalStateException ise) {
-            wrongName = true;
-            return "redirect:/attractions/add";
+        String name = touristAttraction.getName();
+        if (name.isBlank()) {
+            return "redirect:/attractions/add?error=no_name";
         }
-
+        if (touristService.touristAttractionExists(name)) {
+            return "redirect:/attractions/add?error=name_taken";
+        }
+        touristService.addTouristAttraction(touristAttraction);
+        return "redirect:/attractions";
     }
 
     @GetMapping("/attractions/{name}/edit")

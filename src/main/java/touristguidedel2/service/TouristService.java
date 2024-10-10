@@ -14,7 +14,7 @@ public class TouristService {
         touristRepository = new TouristRepository();
     }
 
-    public void addTouristAttraction(TouristAttraction touristAttraction) throws IllegalStateException {
+    public void addTouristAttraction(TouristAttraction touristAttraction) {
         touristRepository.addTouristAttraction(touristAttraction);
     }
 
@@ -41,4 +41,9 @@ public class TouristService {
     public void deleteAttraction(String name) {
         touristRepository.deleteAttraction(name);
     }
+
+    public boolean touristAttractionExists(String name) {
+        return touristRepository.touristAttractionExists(name);
+    }
+
 }
