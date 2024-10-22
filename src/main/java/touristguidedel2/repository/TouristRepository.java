@@ -10,7 +10,7 @@ public class TouristRepository {
     // TODO: delete old attribute
     private final List<TouristAttraction> touristAttractions = new ArrayList<>();
 
-    // TODO: replace with environment variables
+    // TODO: replace with application properties
     private String database = System.getenv("DB_URL");
     private String username = System.getenv("DB_USER");
     private String password = System.getenv("DB_PASSWORD");
@@ -228,13 +228,22 @@ public class TouristRepository {
         touristAttractions.removeIf(touristAttraction -> touristAttraction.getName().equals(name));
     }
 
-    public boolean touristAttractionExists(String name) {
-        for (TouristAttraction touristAttraction : touristAttractions) {
-            if (touristAttraction.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public Boolean touristAttractionExists(String name) {
 
+        String sql = """
+            SELECT attractionName
+            FROM attractions
+            WHERE attractionName = ?""";
+
+        try (Connection connection = DriverManager.getConnection(database, username, password)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException ignored) {
+            return null;
+        }
+    }
 }
