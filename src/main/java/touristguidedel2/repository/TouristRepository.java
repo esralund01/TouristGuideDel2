@@ -61,7 +61,8 @@ public class TouristRepository {
                 }
             }
 
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
 
         return touristAttractions;
     }
@@ -123,7 +124,8 @@ public class TouristRepository {
             while (resultSet.next()) {
                 cities.add(resultSet.getString("cityName"));
             }
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
 
         return cities;
     }
@@ -141,7 +143,8 @@ public class TouristRepository {
             while (resultSet.next()) {
                 tags.add(resultSet.getString("tagName"));
             }
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
 
         return tags;
     }
@@ -228,15 +231,29 @@ public class TouristRepository {
     }
 
     public void deleteAttraction(String name) {
-        touristAttractions.removeIf(touristAttraction -> touristAttraction.getName().equals(name));
+
+        String sql = """
+                DELETE 
+                FROM attractions
+                WHERE attractionName = ?;""";
+
+        try (Connection connection = DriverManager.getConnection(database, username, password)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ignored) {
+
+        }
+
     }
 
     public Boolean touristAttractionExists(String name) {
 
         String sql = """
-            SELECT attractionName
-            FROM attractions
-            WHERE attractionName = ?""";
+                SELECT attractionName
+                FROM attractions
+                WHERE attractionName = ?""";
 
         try (Connection connection = DriverManager.getConnection(database, username, password)) {
 
