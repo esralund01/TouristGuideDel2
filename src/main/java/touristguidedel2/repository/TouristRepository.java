@@ -1,6 +1,7 @@
 package touristguidedel2.repository;
 
 import touristguidedel2.model.TouristAttraction;
+
 import java.sql.*;
 import java.util.*;
 
@@ -22,15 +23,15 @@ public class TouristRepository {
         List<TouristAttraction> touristAttractions = new ArrayList<>();
 
         String sql = """
-            SELECT
-            	attractions.attractionName as name,
-                attractions.attractionDescription as description,
-                cities.cityName as city,
-                tags.tagName as tag
-            FROM attractions_tags, attractions, tags, cities
-            WHERE attractions_tags.attractionId = attractions.attractionId
-            	AND attractions_tags.tagId = tags.tagId
-                AND attractions.city = cities.cityId;""";
+                SELECT
+                	attractions.attractionName as name,
+                    attractions.attractionDescription as description,
+                    cities.cityName as city,
+                    tags.tagName as tag
+                FROM attractions_tags, attractions, tags, cities
+                WHERE attractions_tags.attractionId = attractions.attractionId
+                	AND attractions_tags.tagId = tags.tagId
+                    AND attractions.city = cities.cityId;""";
 
         try (Connection connection = DriverManager.getConnection(database, username, password)) {
 
@@ -58,16 +59,48 @@ public class TouristRepository {
                 }
             }
 
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
 
         return touristAttractions;
     }
 
     public TouristAttraction getAttractionByName(String name) {
-        for (TouristAttraction touristAttraction : touristAttractions){
-            if (touristAttraction.getName().equals(name)){
-                return touristAttraction;
+
+        String sql = """
+                SELECT
+                	attractions.attractionName as name,
+                    attractions.attractionDescription as description,
+                    cities.cityName as city,
+                    tags.tagName as tag
+                FROM attractions_tags, attractions, tags, cities
+                WHERE attractions_tags.attractionId = attractions.attractionId
+                    AND attractions.attractionName = ?
+                	AND attractions_tags.tagId = tags.tagId
+                    AND attractions.city = cities.cityId;""";
+
+        try (Connection connection = DriverManager.getConnection(database, username, password)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            String name1 = resultSet.getString("name");
+
+            String description = resultSet.getString("description");
+            String city = resultSet.getString("city");
+            String tag = resultSet.getString("tag");
+            List<String> tags = new ArrayList<>();
+            tags.add(tag);
+            TouristAttraction touristAttraction = new TouristAttraction(name1, description, city, tags);
+
+            while (resultSet.next()) {
+                String tag1 = resultSet.getString("tag");
+                tags.add(tag1);
             }
+
+            return touristAttraction;
+        } catch (SQLException ignored) {
         }
         return null;
     }
@@ -77,15 +110,16 @@ public class TouristRepository {
         SortedSet<String> cities = new TreeSet<>();
 
         String sql = """
-            SELECT cityName
-            FROM cities""";
+                SELECT cityName
+                FROM cities""";
 
         try (Connection connection = DriverManager.getConnection(database, username, password)) {
             ResultSet resultSet = connection.createStatement().executeQuery(sql);
             while (resultSet.next()) {
                 cities.add(resultSet.getString("cityName"));
             }
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
 
         return cities;
     }
@@ -95,15 +129,16 @@ public class TouristRepository {
         SortedSet<String> tags = new TreeSet<>();
 
         String sql = """
-            SELECT tagName
-            FROM tags""";
+                SELECT tagName
+                FROM tags""";
 
         try (Connection connection = DriverManager.getConnection(database, username, password)) {
             ResultSet resultSet = connection.createStatement().executeQuery(sql);
             while (resultSet.next()) {
                 tags.add(resultSet.getString("tagName"));
             }
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
 
         return tags;
     }
@@ -116,22 +151,22 @@ public class TouristRepository {
         List<String> tags = touristAttraction.getTags();
 
         String getCityId = """
-            SELECT cityId
-            FROM cities
-            WHERE cityName = ?;""";
+                SELECT cityId
+                FROM cities
+                WHERE cityName = ?;""";
 
         String insertAttraction = """
-            INSERT INTO attractions (attractionName, attractionDescription, city)
-            VALUES (?, ?, ?);""";
+                INSERT INTO attractions (attractionName, attractionDescription, city)
+                VALUES (?, ?, ?);""";
 
         String getTagId = """
-            SELECT tagId
-            FROM tags
-            WHERE tagName = ?;""";
+                SELECT tagId
+                FROM tags
+                WHERE tagName = ?;""";
 
         String insertTag = """
-            INSERT INTO attractions_tags (attractionId, tagId)
-            VALUES (?, ?);""";
+                INSERT INTO attractions_tags (attractionId, tagId)
+                VALUES (?, ?);""";
 
         try (Connection connection = DriverManager.getConnection(database, username, password)) {
 
