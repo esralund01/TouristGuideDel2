@@ -33,7 +33,8 @@ public class TouristRepository {
                 FROM attractions_tags, attractions, tags, cities
                 WHERE attractions_tags.attractionId = attractions.attractionId
                 	AND attractions_tags.tagId = tags.tagId
-                    AND attractions.city = cities.cityId;""";
+                    AND attractions.city = cities.cityId
+                ORDER BY attractionName;""";
 
         try (Connection connection = DriverManager.getConnection(database, username, password)) {
 
