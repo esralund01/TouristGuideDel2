@@ -222,12 +222,8 @@ public class TouristRepository {
     }
 
     public void updateTouristAttraction(TouristAttraction touristAttraction) {
-        for (TouristAttraction ta : touristAttractions) {
-            if (ta.getName().equals(touristAttraction.getName())) {
-                touristAttractions.remove(ta);
-                touristAttractions.add(touristAttraction);
-            }
-        }
+        deleteAttraction(touristAttraction.getName());
+        addTouristAttraction(touristAttraction);
     }
 
     public void deleteAttraction(String name) {
