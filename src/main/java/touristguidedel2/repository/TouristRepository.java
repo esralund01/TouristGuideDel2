@@ -1,10 +1,12 @@
 package touristguidedel2.repository;
 
+import org.springframework.stereotype.Repository;
 import touristguidedel2.model.TouristAttraction;
 
 import java.sql.*;
 import java.util.*;
 
+@Repository
 public class TouristRepository {
 
     // TODO: delete old attribute
@@ -59,8 +61,7 @@ public class TouristRepository {
                 }
             }
 
-        } catch (SQLException ignored) {
-        }
+        } catch (SQLException ignored) {}
 
         return touristAttractions;
     }
@@ -75,34 +76,38 @@ public class TouristRepository {
                     tags.tagName as tag
                 FROM attractions_tags, attractions, tags, cities
                 WHERE attractions_tags.attractionId = attractions.attractionId
-                    AND attractions.attractionName = ?
                 	AND attractions_tags.tagId = tags.tagId
-                    AND attractions.city = cities.cityId;""";
+                    AND attractions.city = cities.cityId
+                    AND attractions.attractionName = ?;""";
 
         try (Connection connection = DriverManager.getConnection(database, username, password)) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            String name1 = resultSet.getString("name");
 
+            // First row
+            if (!resultSet.next()) {
+                return null;
+            }
+            String dbName = resultSet.getString("name");
             String description = resultSet.getString("description");
             String city = resultSet.getString("city");
-            String tag = resultSet.getString("tag");
+            String firstTag = resultSet.getString("tag");
             List<String> tags = new ArrayList<>();
-            tags.add(tag);
-            TouristAttraction touristAttraction = new TouristAttraction(name1, description, city, tags);
+            tags.add(firstTag);
 
+            // Other rows
             while (resultSet.next()) {
-                String tag1 = resultSet.getString("tag");
-                tags.add(tag1);
+                String nextTag = resultSet.getString("tag");
+                tags.add(nextTag);
             }
 
-            return touristAttraction;
+            return new TouristAttraction(dbName, description, city, tags);
+
         } catch (SQLException ignored) {
+            return null;
         }
-        return null;
     }
 
     public SortedSet<String> getCities() {
@@ -118,8 +123,7 @@ public class TouristRepository {
             while (resultSet.next()) {
                 cities.add(resultSet.getString("cityName"));
             }
-        } catch (SQLException ignored) {
-        }
+        } catch (SQLException ignored) {}
 
         return cities;
     }
@@ -137,8 +141,7 @@ public class TouristRepository {
             while (resultSet.next()) {
                 tags.add(resultSet.getString("tagName"));
             }
-        } catch (SQLException ignored) {
-        }
+        } catch (SQLException ignored) {}
 
         return tags;
     }

@@ -1,7 +1,10 @@
 package touristguidedel2.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class TouristAttraction {
 
     private String name;

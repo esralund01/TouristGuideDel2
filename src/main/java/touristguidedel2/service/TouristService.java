@@ -1,17 +1,19 @@
 package touristguidedel2.service;
 
+import org.springframework.stereotype.Service;
 import touristguidedel2.model.TouristAttraction;
 import touristguidedel2.repository.TouristRepository;
 
 import java.util.List;
 import java.util.SortedSet;
 
+@Service
 public class TouristService {
 
     private final TouristRepository touristRepository;
 
-    public TouristService() {
-        touristRepository = new TouristRepository();
+    public TouristService(TouristRepository touristRepository) {
+        this.touristRepository = touristRepository;
     }
 
     public void addTouristAttraction(TouristAttraction touristAttraction) {
