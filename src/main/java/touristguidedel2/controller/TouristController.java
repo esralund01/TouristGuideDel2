@@ -11,8 +11,8 @@ public class TouristController {
 
     private final TouristService touristService;
 
-    public TouristController() {
-        touristService = new TouristService();
+    public TouristController(TouristService touristService) {
+        this.touristService = touristService;
     }
 
     @GetMapping("/attractions")
