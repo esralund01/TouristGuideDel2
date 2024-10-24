@@ -54,4 +54,9 @@ public class TouristAttraction {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o || (o instanceof TouristAttraction ta && ((name == null && ta.getName() == null) || name.equals(ta.getName())));
+    }
 }
