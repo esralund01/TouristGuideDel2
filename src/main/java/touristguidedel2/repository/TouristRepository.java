@@ -1,5 +1,6 @@
 package touristguidedel2.repository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import touristguidedel2.model.TouristAttraction;
 
@@ -9,16 +10,12 @@ import java.util.*;
 @Repository
 public class TouristRepository {
 
-    // TODO: delete old attribute
-    private final List<TouristAttraction> touristAttractions = new ArrayList<>();
-
-    // TODO: replace with application properties
-    private String database = System.getenv("DB_URL");
-    private String username = System.getenv("DB_USER");
-    private String password = System.getenv("DB_PASSWORD");
-
-    public TouristRepository() {
-    }
+    @Value("${spring.datasource.url}")
+    private String database;
+    @Value("${spring.datasource.username}")
+    private String username;
+    @Value("${spring.datasource.password}")
+    private String password;
 
     public List<TouristAttraction> getAllAttractions() {
 
