@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import touristguidedel2.model.TouristAttraction;
 import touristguidedel2.service.TouristService;
 
+import java.util.ArrayList;
+
 @Controller
 public class TouristController {
 
@@ -28,7 +30,8 @@ public class TouristController {
 
     @GetMapping("/attractions/{name}/tags")
     public String attractionTags(@PathVariable String name, Model model) {
-        model.addAttribute("touristAttraction", touristService.getAttractionByName(name));
+        TouristAttraction touristAttraction = touristService.getAttractionByName(name);
+        model.addAttribute("touristAttraction", touristAttraction != null ? touristAttraction : new TouristAttraction(name, "", "", new ArrayList<>()));
         return "tags";
     }
 
@@ -45,7 +48,7 @@ public class TouristController {
     @PostMapping("/attractions/save")
     public String attractionSave(@ModelAttribute TouristAttraction touristAttraction) {
         String name = touristAttraction.getName();
-        if (name.isBlank()) {
+        if (name == null || name.isBlank()) {
             return "redirect:/attractions/add?error=no_name";
         }
         if (touristService.touristAttractionExists(name)) {
