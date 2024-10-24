@@ -59,7 +59,8 @@ public class TouristRepository {
                 }
             }
 
-        } catch (SQLException ignored) {
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return touristAttractions;
@@ -104,7 +105,8 @@ public class TouristRepository {
 
             return new TouristAttraction(dbName, description, city, tags);
 
-        } catch (SQLException ignored) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -122,7 +124,8 @@ public class TouristRepository {
             while (resultSet.next()) {
                 cities.add(resultSet.getString("cityName"));
             }
-        } catch (SQLException ignored) {
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return cities;
@@ -141,7 +144,8 @@ public class TouristRepository {
             while (resultSet.next()) {
                 tags.add(resultSet.getString("tagName"));
             }
-        } catch (SQLException ignored) {
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return tags;
@@ -214,7 +218,8 @@ public class TouristRepository {
                 }
             }
             return attractionsInserted == 1 && tagsInserted == tags.size();
-        } catch (SQLException ignored) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -236,8 +241,8 @@ public class TouristRepository {
             preparedStatement.setString(1, name);
             preparedStatement.executeUpdate();
 
-        } catch (SQLException ignored) {
-
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }
@@ -256,7 +261,8 @@ public class TouristRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
 
-        } catch (SQLException ignored) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
